@@ -1,3 +1,4 @@
+from random import choice
 from bs4 import BeautifulSoup
 from pyparsing import List
 import requests
@@ -8,16 +9,14 @@ import time
 
 class AdidasKraken:
     def get_adidas_products(self):
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-        }
-
+    
         options = webdriver.ChromeOptions()
         # options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("window-size=1200,900")
+        options.add_argument(f'--user-agent={self.get_random_useragent()}')
         browser = webdriver.Chrome(options=options)
         browser.get("https://www.adidas.de/en/performance-outlet")
         html_source = browser.page_source
@@ -26,7 +25,7 @@ class AdidasKraken:
         productList = []
 
         for i in range(len(all_a_tags)):
-            asset = self.__get_sub_page(all_a_tags[i], browser)
+            asset = self.__get_sub_page(a_tag=all_a_tags[i], browser=browser)
             product = {
                 "product_name": asset["product_name"],
                 "product_link": asset["product_link"],
@@ -36,8 +35,19 @@ class AdidasKraken:
             }
             productList.append(product)
         return productList
+    
+    
+    def read_file(self, filename, method):
+        with open(filename, method) as f:
+            content = [line.strip('\n') for line in f]
+            return content
 
-    def __get_sub_page(a_tag, browser):
+
+    def get_random_useragent(self):
+        useragents = self.read_file('./useragents.txt', 'r')
+        return choice(useragents)
+
+    def __get_sub_page(self, a_tag, browser):
         sales_a_tag = ""
         all_images = []
         products_name = ""

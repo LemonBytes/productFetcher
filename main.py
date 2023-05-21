@@ -1,8 +1,9 @@
-from getProducts import *
+from ProductFactory import ProductFactory
 
 
 def main():
-    tie_all_products()
+    factory = ProductFactory()
+    factory.collect_all_products()
 
 
 if "__main__" == __name__:

@@ -67,7 +67,4 @@ class VenumKraken:
         return all_image_urls
 
        
-kraken = VenumKraken()
-products = kraken.get_venum_products()
-with open("../productList.json", "w") as outfile:
-        json.dump(products, outfile)
+

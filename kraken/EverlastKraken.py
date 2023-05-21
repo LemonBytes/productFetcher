@@ -4,7 +4,7 @@ import requests
 
 
 class EverlastKraken:
-    def get_everlast_products():
+    def get_everlast_products(self):
         everlast_page = requests.get("https://www.everlast.com/deals/sale")
         soup = BeautifulSoup(everlast_page.content, "html.parser")
         all_a_tags = soup.find_all("a", class_="product-item-link")
@@ -18,7 +18,7 @@ class EverlastKraken:
             product = {
                 "product_name": all_a_tags[i].find_next("span").string,
                 "product_link": all_a_tags[i]["href"],
-                "product_image": __get_everlast_images(all_a_tags[i]["href"]),
+                "product_image": self.__get_everlast_images(all_a_tags[i]["href"]),
                 "product_special_price": special_and_regular[i][0],
                 "product_price": special_and_regular[i][1],
             }
@@ -26,13 +26,14 @@ class EverlastKraken:
         return productsList
 
 
-def __get_everlast_images(a_tag) -> List[str]:
-    images = []
-    everlast_subpage = requests.get(a_tag)
-    subpage_soup = BeautifulSoup(everlast_subpage.content, "html.parser")
-    all_images = subpage_soup.find_all("a", {"class": "product-image"}).find(
-        "img", recursive=False
-    )
-    for image in all_images:
-        images.append(image["src"])
-    return images
+    def __get_everlast_images(self, a_tag) -> List[str]:
+        images = []
+        everlast_subpage = requests.get(a_tag)
+        subpage_soup = BeautifulSoup(everlast_subpage.content, "html.parser")
+        all_images = subpage_soup.find_all("a", {"class": "product-image"})
+        for image in all_images:
+            image_url = image.find(
+            "img", recursive=False
+            )["src"]
+            images.append(image_url)
+        return images
