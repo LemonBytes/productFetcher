@@ -29,7 +29,7 @@ class AdidasKraken:
             product = {
                 "product_name": asset["product_name"],
                 "product_link": asset["product_link"],
-                "product_image": asset["product_image"],
+                "product_images": asset["product_image"],
                 "product_special_price": asset["product_special_price"],
                 "product_price": asset["product_price"],
             }
@@ -60,7 +60,6 @@ class AdidasKraken:
         subpage_soup = BeautifulSoup(html_source, "html.parser")
         all_divs = subpage_soup.find_all("div")
 
-        images_src = []
         for div in all_divs:
             try:
                 price_class = div.get("class")
@@ -79,8 +78,7 @@ class AdidasKraken:
                             images = subpage_soup.find_all(
                                 "div", class_="content___3m-ue"
                             )
-                            images_src.append(images[i].find("img")["src"])
-                        all_images.append(images_src)
+                            all_images.append(images[i].find("img")["src"])
             except:
                 pass
 

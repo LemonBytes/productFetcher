@@ -1,5 +1,6 @@
 import json
 from random import choice
+import string
 from time import sleep
 from bs4 import BeautifulSoup
 import requests
@@ -41,8 +42,8 @@ class AmazonKraken:
                     images =  self.__get_amazon_images(url = product_url, browser=browser)
                     product = {
                             "product_name": name,
-                            "product_link": product_url,
-                            "product_image": images,
+                            "product_link": self.__injectTrackingID(product_url),
+                            "product_images": images,
                             "product_special_price": special_price,
                             "product_price": price
                         }
@@ -54,6 +55,8 @@ class AmazonKraken:
         with open(filename, method) as f:
             content = [line.strip('\n') for line in f]
             return content    
+
+    
 
     def __get_random_useragent(self):
         useragents = self.read_file('./useragents.txt', 'r')
@@ -73,7 +76,12 @@ class AmazonKraken:
             discount_price = price_one
         return discount_price.strip(),  price.strip()    
                     
+        
 
+    def __injectTrackingID(self, url) -> string:
+        trackingID = '&tag=warofmind-20'
+        first_part = url.split("ref=")[0]
+        return first_part + trackingID
 
     def __get_amazon_images(self, url, browser):
         browser.get(url)
@@ -109,5 +117,7 @@ class AmazonKraken:
 
 
 
-    
 
+
+
+     

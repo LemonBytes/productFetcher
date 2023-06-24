@@ -29,10 +29,9 @@ class VenumKraken:
         for i in range(1, 7, 1):
             response = requests.request(
                 "GET",
-                url=f"https://euro.venum.com/en/promo.html?p={i}&is_scroll=1",
+                url=f"https://eu.venum.com/collections/outlet?page={i}",
             ).text
             soup = BeautifulSoup(response, "html.parser")
-            print(i)
             all_a_tags = soup.find_all("a", class_="product-item-link")
             prices = soup.find_all("span", class_="price")
             avaiable_divs = soup.find_all("div", class_="uncover-swatch-group")
@@ -48,11 +47,13 @@ class VenumKraken:
                     product = {
                         "product_name": all_a_tags[i].string,
                         "product_link": all_a_tags[i]["href"],
-                        "product_image": self.__get_venum_images(url=all_a_tags[i]["href"]),
+                        "product_images": self.__get_venum_images(url=all_a_tags[i]["href"]),
                         "product_special_price": special_and_regular[i][1],
                         "product_price": special_and_regular[i][0],
                     }
+                    print(product)
                     productsList.append(product)
+        print(productsList)                    
         return productsList
 
     def __get_venum_images(self, url):
@@ -65,6 +66,3 @@ class VenumKraken:
                 break
             all_image_urls.append(all_images[i]["src"])
         return all_image_urls
-
-       
-

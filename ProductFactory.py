@@ -10,15 +10,15 @@ class ProductFactory:
     def __init__(self):
         self.products = {
             "amazon": [],
-            "venum": [],
             "everlast": [],
             "adidas": [],
+
         }
         self.lock = threading.Lock()
 
     def collect_all_products(self):
         threads = []
-        brands = ["everlast", "amazon", "adidas", "venum"]
+        brands = ["everlast", "amazon", "adidas"]
 
         for brand in brands:
             thread = threading.Thread(target=self.get_products, args=(brand,))

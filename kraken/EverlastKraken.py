@@ -18,7 +18,7 @@ class EverlastKraken:
             product = {
                 "product_name": all_a_tags[i].find_next("span").string,
                 "product_link": all_a_tags[i]["href"],
-                "product_image": self.__get_everlast_images(all_a_tags[i]["href"]),
+                "product_images": self.__get_everlast_images(all_a_tags[i]["href"]),
                 "product_special_price": special_and_regular[i][0],
                 "product_price": special_and_regular[i][1],
             }
